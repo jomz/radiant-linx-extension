@@ -1,0 +1,11 @@
+- if pages = Page.find_all_by_layout_id(@layout.id)
+  = "#{pluralize(pages.count, 'page is', 'pages are')} using this layout:"
+  %table.index#pages{:summary=>t('page_hierarchy'), :style => "background-color: white"}
+    %tbody
+      - pages.each do |page|
+        %tr
+          %td= link_to("#{image('page', :class => "icon")} #{page.title}", edit_admin_page_url(page), :title => page.path)
+          %td{:style => "color: black"}
+            - layout_inheriting_children = page.children.find_all_by_layout_id(nil)
+            - if layout_inheriting_children.any?
+              = "And #{layout_inheriting_children.count} out of #{page.children.count} child pages."
